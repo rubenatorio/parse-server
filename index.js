@@ -14,9 +14,28 @@ if (!databaseUri) {
 var api = new ParseServer({
   databaseURI: databaseUri || 'mongodb://localhost:27017/dev',
   cloud: process.env.CLOUD_CODE_MAIN || __dirname + '/cloud/main.js',
-  appId: process.env.APP_ID || 'myAppId',
-  masterKey: process.env.MASTER_KEY || '', //Add your master key here. Keep it secret!
+  appId: process.env.APP_ID || 'MK5KVBqIzhhM5tIwX9hrKnQLLKpHeJ9O0VHS4Fqp',
+  masterKey: process.env.MASTER_KEY || 'G1QPMwxoMOfCNALvY7RrQkk9Z2X2yin7kQkemghg', //Add your master key here. Keep it secret!
   serverURL: process.env.SERVER_URL || 'http://localhost:1337/parse',  // Don't forget to change to https if needed
+  clientKey: process.env.CLIENT_KEY || 'b6HOOvr7DCIZDCp7mXIZvnQCTx6XAzvPnbC4yDUO',
+  restAPIKey: process.env.REST_KEY || 'VIcqjZWIKDJPsNh4JjqQaCFkFzxH10bjVyaUXKi7',
+  javascriptKey: process.env.JAVASCRIPT_KEY || 'CLStTSaozrHYjthLXzZkqoUCsJcgnFVQtb5rjtyu',
+  dotNetKey: process.env.DOT_NET_KEY || 'f2wCuTCkZrtD0pZUWj2MsiPs45MLB5L6pyQYmEqa',
+  fileKey: process.env.FILE_KEY || 'aad3fa7e-9167-4818-8643-78edc359fbd1',
+  push: {
+    ios: [
+      {
+        pfx: '/push/sugr-development.p12', // Dev PFX or P12
+        bundleId: 'systems.invariant.sugr',
+        production: false // Dev
+      },
+      {
+        pfx: '/push/sugr-production.p12', // Prod PFX or P12
+        bundleId: 'systems.invariant.sugr',  
+        production: true // Prod
+      }
+    ]
+  },
   liveQuery: {
     classNames: ["Posts", "Comments"] // List of classes to support for query subscriptions
   }
