@@ -22,15 +22,16 @@ var api = new ParseServer({
   javascriptKey: process.env.JAVASCRIPT_KEY || 'CLStTSaozrHYjthLXzZkqoUCsJcgnFVQtb5rjtyu',
   dotNetKey: process.env.DOT_NET_KEY || 'f2wCuTCkZrtD0pZUWj2MsiPs45MLB5L6pyQYmEqa',
   fileKey: process.env.FILE_KEY || 'aad3fa7e-9167-4818-8643-78edc359fbd1',
+  verbose: true,
   push: {
     ios: [
       {
-        pfx: '/push/sugr-development.p12', // Dev PFX or P12
+        pfx: './push/sugr-development.p12', // Dev PFX or P12
         bundleId: 'systems.invariant.sugr',
         production: false // Dev
       },
       {
-        pfx: '/push/sugr-production.p12', // Prod PFX or P12
+        pfx: './push/sugr-production.p12', // Prod PFX or P12
         bundleId: 'systems.invariant.sugr',  
         production: true // Prod
       }
