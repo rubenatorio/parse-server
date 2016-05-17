@@ -59,8 +59,6 @@ Parse.Cloud.define("updateTabCredit", function(request, response) {
 
 Parse.Cloud.define("getTabCreditFromCurrentUser", function(request, response) {
 
-  Parse.Cloud.useMasterKey();
-
   var tabCreditId = request.user.get("tabCreditId");
 
   getTabCreditWithId(tabCreditId).then(function(tabCredit) {
@@ -140,7 +138,7 @@ var getTabCreditWithId = exports.getTabCreditWithId = function(tabCreditId) {
 
   var query = new Parse.Query(Parse.Object.extend("TabCredit"));
 
-  return query.get(tabCreditId).then(function(tabCredit) {
+  return query.get(tabCreditId, { useMasterKey: true }).then(function(tabCredit) {
     return tabCredit;
   }, function(error) { 
     Parse.Promise.error(error);

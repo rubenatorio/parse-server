@@ -131,15 +131,13 @@ Parse.Cloud.define("updateUsers", function(req, resp) {
 
 Parse.Cloud.define("updateCraig", function(req, resp) {
  
-  Parse.Cloud.useMasterKey();
-
   var query = new Parse.Query(Parse.Object.extend("ActivityManager"));
 
   query.limit(200);
 
   query.find().then(function(activityManagers) {
 
-   resp.success(activityManagers.length);
+   resp.success(activityManagers);
   }, function(error) {
     resp.error(error);
   });
