@@ -5,7 +5,7 @@ var sendPushWithData = exports.sendPushWithData = function(query, data) {
     where: query,
     
     data: data
-  });
+  }, { useMasterKey: true });
 }
 
 var sendPushToUser = function(payload, destination) {
@@ -27,7 +27,7 @@ var sendPushToUsers = function(request, activity, destination) {
   
   alertPayload(request, activity, true, function(payload) {
     
-    sendPushToUser(payload, Parse.User.current());
+    sendPushToUser(payload, request.user);
   });
 }
 
@@ -409,7 +409,7 @@ exports.queryWithReverseField = function(className, field1, field2, obj1, obj2) 
 
 exports.createUserWithId = function(objectId) {
 
-  var user = new Parse.Object("User");
+  var user = new Parse.Object("_User");
 
   user.id = objectId;
 

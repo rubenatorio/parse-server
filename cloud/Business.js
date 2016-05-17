@@ -91,8 +91,6 @@ Parse.Cloud.beforeDelete('Business', function(request, response) {
 
 Parse.Cloud.define("addSugrCubeToBusiness", function(req, resp) {
 
-  Parse.Cloud.useMasterKey();
-
   var businessID = req.params.businessId;
 
   var query = new Parse.Query(Parse.Object.extend("Business"));
@@ -109,9 +107,7 @@ Parse.Cloud.define("addSugrCubeToBusiness", function(req, resp) {
 
 Parse.Cloud.define("sendPushToUserFeaturedBusiness", function(req, resp) {
 
-  Parse.Cloud.useMasterKey();
-
-  var user = new Parse.Object("User");
+  var user = new Parse.Object("_User");
 
   user.id = req.params.userId;
 

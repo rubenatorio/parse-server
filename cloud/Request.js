@@ -187,15 +187,17 @@ var onDeleteUpdateEventHelper = function(request, user, callBack) {
  */
  Parse.Cloud.define("sendFriendRequestToUser", function(req, resp) {
   
-  var currentUser = Parse.User.current();
+  var currentUser = req.user;
   
-  var user = new Parse.Object("User");
+  var user = new Parse.Object("_User");
 
   user.id = req.params.destination;
 
+  console.log("userid: " + currentUser.id);
+
   isFriend(currentUser, user).then(function(isFriend) { 
 
-    if (isFriend) return;
+    if (isFriend) return Parse.Promise.as();
 
     var activityManager = currentUser.get("activityManager");
 
@@ -209,7 +211,7 @@ var onDeleteUpdateEventHelper = function(request, user, callBack) {
 
     }).then(function(count) {
 
-      if (count > 0) return;
+      if (count > 0) return Parse.Promise.as();
 
       var Request = Parse.Object.extend("Request");
 
@@ -248,7 +250,7 @@ Parse.Cloud.define("sendGiftToUser", function(req, resp) {
 
   var destination = req.params.destination;
   
-  var currentUser = Parse.User.current();
+  var currentUser = req.user;
   
   var query = new Parse.Query(Parse.Object.extend("User"));
   
@@ -357,7 +359,7 @@ Parse.Cloud.define("tagUsers", function(req, resp) {
 
   Parse.Cloud.useMasterKey();
 
-  var currentUser = Parse.User.current();
+  var currentUser = req.user;
 
   var contentId = req.params.contentId;
 

@@ -5,8 +5,6 @@ var helper = require('./Helper.js');
 
 Parse.Cloud.define("featureBusiness", function(req, resp) {
 
-  Parse.Cloud.useMasterKey();
-
   var contentId  = req.params.contentId;
 
   var query = new Parse.Query(Parse.Object.extend("PublicContent"));
@@ -38,7 +36,7 @@ Parse.Cloud.define("featureBusiness", function(req, resp) {
         }).then(function(admins) {
 
          for (var i = 0; i < admins.length; i++) 
-           if (admins[i].id == Parse.User.current().id) {
+           if (admins[i].id == req.user.id) {
 
             contentManager.relation("channel").add(content);
             contentManager.increment("channelCount");
@@ -51,7 +49,7 @@ Parse.Cloud.define("featureBusiness", function(req, resp) {
 
           request = new Request();
 
-          request.set("source", Parse.User.current());
+          request.set("source", req.user);
 
           request.set("type", "featureBusiness");
 
@@ -95,8 +93,6 @@ Parse.Cloud.define("featureBusiness", function(req, resp) {
 
 Parse.Cloud.define("viewedContent", function(req, resp) {
 
-  Parse.Cloud.useMasterKey();
-
   var destination  = req.params.destination;
 
   var query = new Parse.Query(Parse.Object.extend("User"));
@@ -115,7 +111,7 @@ Parse.Cloud.define("viewedContent", function(req, resp) {
 
           contentManager.save();
 
-          var currentUser = Parse.User.current();
+          var currentUser = req.user;
 
           var message = currentUser.get("name") + " viewed your channel";
 
@@ -150,8 +146,6 @@ Parse.Cloud.define("viewedContent", function(req, resp) {
 
 Parse.Cloud.define("updateUserInteraction", function(req, resp) {
 
-  Parse.Cloud.useMasterKey();
-
   var UserInteraction = Parse.Object.extend("UserInteraction");
 
   var userInteraction; 
@@ -173,7 +167,7 @@ Parse.Cloud.define("updateUserInteraction", function(req, resp) {
   var points = [visitPoint, viewPoint,feedbackPoint, textPoint, facetimePoint, 
                 messagePoint, payPoint, featurePoint, unfiendPoint];
 
-  var source = Parse.User.current();
+  var source = req.user;
 
   var query1 = source.relation("userInteractions").query();
 
@@ -337,8 +331,6 @@ Parse.Cloud.define("updateUserInteraction", function(req, resp) {
 */
 
 Parse.Cloud.define("isFriend", function(req, resp) {
-
-  Parse.Cloud.useMasterKey();
 
   var destination  = req.params.destination;
 

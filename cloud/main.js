@@ -40,8 +40,6 @@ var _ = require("underscore");
 
  Parse.Cloud.define("businessNameToKeywords", function(req, resp) {
 
-  Parse.Cloud.useMasterKey();
-
   var query = new Parse.Query(Parse.Object.extend("Business"));
 
   query.find().then(function(businesses) {
@@ -104,8 +102,6 @@ var _ = require("underscore");
 
 Parse.Cloud.define("updateUsers", function(req, resp) {
 
- Parse.Cloud.useMasterKey();
-
  var query = new Parse.Query(Parse.User);
 
  query.find().then(function(users) {
@@ -154,7 +150,7 @@ Parse.Cloud.define("updateCraig", function(req, resp) {
 
   var beaconId = req.params.beaconId;
 
-  var currentUser = Parse.User.current();
+  var currentUser = req.user;
 
   var query = new Parse.Query(Parse.Object.extend("SugrCube"));
 
@@ -192,8 +188,6 @@ Parse.Cloud.define("updateCraig", function(req, resp) {
  */
  Parse.Cloud.define("notifyTargets", function(req, resp) {
 
-  Parse.Cloud.useMasterKey();
-
   var contentID = req.params.contentId;
 
   var query = new Parse.Query(Parse.Object.extend("PrivateContent"));
@@ -204,7 +198,7 @@ Parse.Cloud.define("updateCraig", function(req, resp) {
 
       var targets = getTargetsFromUsers(results.get("targets"));
 
-      sendPush(Parse.User.current(), targets, resp);
+      sendPush(req.user, targets, resp);
     },
     error: function(object, error) {
 
@@ -220,8 +214,6 @@ Parse.Cloud.define("updateCraig", function(req, resp) {
  */
  Parse.Cloud.define("sendPushToUsers", function(req, resp) {
 
-  Parse.Cloud.useMasterKey();
-
   var users = req.params.users;
 
   var payload = req.params.payload;
@@ -236,7 +228,7 @@ Parse.Cloud.define("updateCraig", function(req, resp) {
 
     data: payload
 
-  }).then(function() {
+  }, { useMasterKey: true }).then(function() {
 
     resp.success("Push was sent successfully.")
 
@@ -268,9 +260,7 @@ Parse.Cloud.define("updateCraig", function(req, resp) {
  */
  Parse.Cloud.define("broadcastToAllUsers", function(req, resp) {
 
-  Parse.Cloud.useMasterKey();
-
-  var currentUser = Parse.User.current();
+  var currentUser = req.user;
 
   var contentID = req.params.contentId;
 
@@ -339,9 +329,7 @@ Parse.Cloud.define("updateCraig", function(req, resp) {
  */
  Parse.Cloud.define("broastcastToBeacons", function(req, resp) {
 
-  Parse.Cloud.useMasterKey();
-
-  var currentUser = Parse.User.current();
+  var currentUser = req.user;
 
   var contentID = req.params.contentId;
 
@@ -388,11 +376,9 @@ Parse.Cloud.define("updateCraig", function(req, resp) {
 
 Parse.Cloud.define("unFriendUser", function(req, resp) {
 
-  Parse.Cloud.useMasterKey();
-
   var destination = req.params.destination;
   
-  var currentUser = Parse.User.current();
+  var currentUser = req.user;
   
   var query = new Parse.Query(Parse.Object.extend("User"));
   
@@ -433,7 +419,7 @@ Parse.Cloud.define("unFriendUser", function(req, resp) {
                   source: currentUser.id,
                   destination: user.id,
                 }
-              }).then(function() {
+              }, { useMasterKey: true }).then(function() {
 
                 resp.success("Push was sent successfully.")
 
@@ -508,9 +494,7 @@ Parse.Cloud.define("unFriendUser", function(req, resp) {
 
 function sendPushToLocation(req, resp) {
 
-  Parse.Cloud.useMasterKey();
-
-  var currentUser = Parse.User.current();
+  var currentUser = req.user;
 
   var contentID = req.params.contentId;
 
@@ -610,7 +594,7 @@ function sendPush(user, targets, resp) {
 
     data: { alert: message }
 
-  }).then(function() {
+  }, { useMasterKey: true }).then(function() {
 
     resp.success("Push was sent successfully.")
 
@@ -626,7 +610,7 @@ function getTargetsFromUsers(users) {
 
   var targets = _.map(users, function(target) {
 
-    var pointer = new Parse.Object("User");
+    var pointer = new Parse.Object("_User");
 
     pointer.id = target.id;
 

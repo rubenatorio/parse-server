@@ -4,6 +4,7 @@
 var express = require('express');
 var ParseServer = require('parse-server').ParseServer;
 var path = require('path');
+var os = require("os");
 
 var databaseUri = process.env.DATABASE_URI || process.env.MONGODB_URI;
 
@@ -12,7 +13,7 @@ if (!databaseUri) {
 }
 
 var api = new ParseServer({
-  databaseURI: databaseUri || 'mongodb://localhost:27017/dev',
+  databaseURI: databaseUri || 'mongodb://'+ os.hostname() +':27017/dev',
   cloud: process.env.CLOUD_CODE_MAIN || __dirname + '/cloud/main.js',
   appId: process.env.APP_ID || 'MK5KVBqIzhhM5tIwX9hrKnQLLKpHeJ9O0VHS4Fqp',
   masterKey: process.env.MASTER_KEY || 'G1QPMwxoMOfCNALvY7RrQkk9Z2X2yin7kQkemghg', //Add your master key here. Keep it secret!
@@ -68,7 +69,7 @@ app.get('/test', function(req, res) {
 var port = process.env.PORT || 1337;
 var httpServer = require('http').createServer(app);
 httpServer.listen(port, function() {
-    console.log('parse-server-example running on port ' + port + '.');
+    console.log('sugr-local running on ' + os.hostname() +':' + port);
 });
 
 // This will enable the Live Query real-time server

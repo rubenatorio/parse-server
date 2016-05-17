@@ -1,15 +1,13 @@
 
-// Parse.Cloud.useMasterKey() required
+//{ useMasterKey: true } required
 
 Parse.Cloud.define("updateTabCredit", function(request, response) {
-
-  Parse.Cloud.useMasterKey();
 
   getTabCreditWithId(request.params.tabCreditId).then(function(tabCredit) {
 
     tabCredit.increment("amount", request.params.amount);
 
-    return tabCredit.save();
+    return tabCredit.save({ useMasterKey: true });
 
   }).then(function(tabCredit) {
     response.success(tabCredit);
@@ -70,13 +68,11 @@ Parse.Cloud.define("getTabCreditFromCurrentUser", function(request, response) {
 
 Parse.Cloud.define("getWalletForUser", function(request, response) {
 
-  Parse.Cloud.useMasterKey();
-
   var tabCreditId = request.user.get("tabCreditId");
 
   getTabCreditWithId(tabCreditId).then(function(tabCredit) {
 
-    return tabCredit.relation("wallet").query().find();
+    return tabCredit.relation("wallet").query().find({ useMasterKey: true });
 
   }).then(function(wallet) {
     response.success(wallet);
@@ -87,13 +83,11 @@ Parse.Cloud.define("getWalletForUser", function(request, response) {
 
 Parse.Cloud.define("redeemWalletItem", function(request, response) {
 
-  Parse.Cloud.useMasterKey();
-
   getWalletItemWithId(request.params.walletItemId).then(function(walletItem) {
 
     walletItem.set("redeemed", true);
 
-    return walletItem.save()
+    return walletItem.save({ useMasterKey: true })
     
   }).then(function(walletItem) {
     response.success(walletItem);
@@ -115,7 +109,7 @@ exports.createTabCreditForUser = function(user) {
   tabCredit.set("user", user);
   tabCredit.set("amount", 0);
 
-  tabCredit.save().then(function(tabCredit) {
+  tabCredit.save({ useMasterKey: true }).then(function(tabCredit) {
 
     user.set("tabCreditId", tabCredit.id);
     
@@ -127,7 +121,7 @@ var getWalletItemWithId = exports.getWalletItemWithId = function(walletItemId) {
 
   var query = new Parse.Query(Parse.Object.extend("WalletItem"));
 
-  return query.get(walletItemId).then(function(walletItem) {
+  return query.get(walletItemId, { useMasterKey: true }).then(function(walletItem) {
     return walletItem;
   }, function(error) { 
     Parse.Promise.error(error);
