@@ -1,4 +1,4 @@
-var Helper = require('cloud/Helper.js');
+var Helper = require('./Helper.js');
 
 Parse.Cloud.afterSave('Business', function(request, response) {
 

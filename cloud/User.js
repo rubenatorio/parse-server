@@ -1,6 +1,6 @@
-var Helper = require('cloud/Helper.js');
-var Payment = require('cloud/Payment.js');
-var TabCredit = require('cloud/TabCredit.js');
+var Helper = require('./Helper.js');
+var Payment = require('./Payment.js');
+var TabCredit = require('./TabCredit.js');
 
 Parse.Cloud.afterSave(Parse.User, function(request, response) {
 

@@ -1,8 +1,9 @@
 
-var TabCredit = require('cloud/TabCredit.js');
-var Stripe = require('stripe');
+var TabCredit = require('./TabCredit.js');
+
 var stripeSecretKey = 'sk_test_4fRiCtuZlzOoGifq2fEWILtB';
-Stripe.initialize(stripeSecretKey);
+
+var stripe = require('stripe')(stripeSecretKey);
 
 var baseUrl = "https://" + stripeSecretKey + "@api.stripe.com";
 
@@ -20,7 +21,7 @@ Parse.Cloud.define("purchaseItem", function(request, response) {
 
     purchase = aPurchase;
 
-    return Stripe.Charges.create({
+    return stripe.charges.create({
                     amount: request.params.amount * 100, // express dollars in cents
                     currency: 'usd',
                     source: request.params.cardId,
@@ -106,7 +107,7 @@ Parse.Cloud.define("purchaseTicket", function(request, response) {
 
     purchase = aPurchase;
 
-    return Stripe.Charges.create({
+    return stripe.charges.create({
                     amount: request.params.amount * 100, // express dollars in cents
                     currency: 'usd',
                     source: request.params.cardId,
@@ -241,7 +242,7 @@ Parse.Cloud.define("saveCardToParse", function(request, response) {
 
   var cardToken = request.params.cardToken;
   
-  Stripe.Tokens.retrieve( cardToken, {
+  stripe.tokens.retrieve( cardToken, {
 
     success: function(token) {
 
@@ -338,7 +339,7 @@ Parse.Cloud.define("retrieveAllCards", function(request, response) {
 
 Parse.Cloud.define("deleteCard", function(request, response) {
 
-  Stripe.Customers.del( request.params.customerId, {
+  stripe.customers.del( request.params.customerId, {
     success: function(customer) {
       response.success(customer);
     }, error: function(httpResponse) {
@@ -399,7 +400,7 @@ Parse.Cloud.define("transferTest", function(request, response) {
 
 exports.createStripeCustomer = function(user) {
 
-  Stripe.Customers.create({
+  stripe.customers.create({
     description: user.id
   }).then(function(customer) {
 
@@ -428,7 +429,7 @@ var createStripeCustomer = function(user, response) {
 }
 var getCustomerFromId = function(customerId, callBack) {
 
-  Stripe.Customers.retrieve( customerId, {
+  stripe.customers.retrieve( customerId, {
 
     success: function(customer) {
 

@@ -1,4 +1,4 @@
-var helper = require('cloud/Helper.js');
+var helper = require('./Helper.js');
 
 Parse.Cloud.beforeDelete('Event', function(request, response) {
 

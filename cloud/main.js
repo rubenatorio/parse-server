@@ -20,17 +20,17 @@
  */
 
 // MUST INCLUDE THESE FILES FOR THEM TO WORK
-require('cloud/Content.js');
-require('cloud/Request.js');
-require('cloud/User.js');
-require('cloud/phone.js');
-require('cloud/strings.js');
-require('cloud/Channels.js');
-require('cloud/Business.js');
-require('cloud/Activity.js');
-require('cloud/Event.js');
-require('cloud/Payment.js');
-require('cloud/TabCredit.js');
+require('./Content.js');
+require('./Request.js');
+require('./User.js');
+require('./phone.js');
+require('./strings.js');
+require('./Channels.js');
+require('./Business.js');
+require('./Activity.js');
+require('./Event.js');
+require('./Payment.js');
+require('./TabCredit.js');
 
 var _ = require("underscore");
 
@@ -338,27 +338,27 @@ Parse.Cloud.define("updateCraig", function(req, resp) {
   });
 });
 
- Parse.Cloud.job("updateBeaconId", function(req, resp) {
+//  Parse.Cloud.job("updateBeaconId", function(req, resp) {
 
-  Parse.Cloud.useMasterKey();
+//   Parse.Cloud.useMasterKey();
 
-  var query = new Parse.Query(Parse.Object.extend("User"));
+//   var query = new Parse.Query(Parse.Object.extend("User"));
 
-  query.find({
+//   query.find({
 
-    success: function(results) {
+//     success: function(results) {
 
-      for(var i = 1; i < results.length; i++) {
-        results[i].set("beaconId", i);
-        results[i].save();
-      }
-    },
-    error: function(object, error) {
+//       for(var i = 1; i < results.length; i++) {
+//         results[i].set("beaconId", i);
+//         results[i].save();
+//       }
+//     },
+//     error: function(object, error) {
 
-      resp.error("Failed to retrieve "+error.message);
-    }
-  });
-});
+//       resp.error("Failed to retrieve "+error.message);
+//     }
+//   });
+// });
 
 /*
  * SEND PUSH TO ALL USERS

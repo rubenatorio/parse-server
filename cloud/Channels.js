@@ -1,4 +1,4 @@
-var helper = require('cloud/Helper.js');
+var helper = require('./Helper.js');
 
 // query.get("", { success: function(ob){} , error: function(error){resp.error(false);}});
 
@@ -239,88 +239,88 @@ Parse.Cloud.define("updateUserInteraction", function(req, resp) {
   });
 });
 
-Parse.Cloud.job("hotProfiles", function(req, resp) {
+// Parse.Cloud.job("hotProfiles", function(req, resp) {
 
-  Parse.Cloud.useMasterKey();
+//   Parse.Cloud.useMasterKey();
 
-  var hotUsers = [];
+//   var hotUsers = [];
 
-    // Delete all hot profiles
-    var HP = Parse.Object.extend("HotProfiles");
+//     // Delete all hot profiles
+//     var HP = Parse.Object.extend("HotProfiles");
     
-    var query = new Parse.Query(HP);
+//     var query = new Parse.Query(HP);
     
-    query.find({
+//     query.find({
 
-      success: function(results) {
+//       success: function(results) {
 
-        Parse.Object.destroyAll(results, null);
-      },
-      error: function(error) {
+//         Parse.Object.destroyAll(results, null);
+//       },
+//       error: function(error) {
 
-        resp.error("Could not delete hot profiles: " + error);
-      }
-    });
+//         resp.error("Could not delete hot profiles: " + error);
+//       }
+//     });
     
-    randomSocialGravity(function() {
+//     randomSocialGravity(function() {
 
-        // Create new hot profiles
-        var userQuery = new Parse.Query(Parse.Object.extend("User"));
+//         // Create new hot profiles
+//         var userQuery = new Parse.Query(Parse.Object.extend("User"));
         
-        userQuery.descending("socialGravity");
+//         userQuery.descending("socialGravity");
 
-        userQuery.find({
+//         userQuery.find({
 
-          success: function(users) {
+//           success: function(users) {
 
-            var tier = users.length * 0.05;
+//             var tier = users.length * 0.05;
 
-            for (var i = 0; i < users.length; i++) {
+//             for (var i = 0; i < users.length; i++) {
 
-              var user = users[i];
+//               var user = users[i];
 
-              var isHot = (i <= tier);
+//               var isHot = (i <= tier);
 
-              if(isHot) {
+//               if(isHot) {
 
-                var hotProfile = new HP();
+//                 var hotProfile = new HP();
 
-                hotProfile.set("owner", user);
-                hotProfile.set("score", user.get("socialGravity"));
-                hotProfile.save();
+//                 hotProfile.set("owner", user);
+//                 hotProfile.set("score", user.get("socialGravity"));
+//                 hotProfile.save();
 
-                hotUsers.push(user);
-              }
+//                 hotUsers.push(user);
+//               }
 
-              user.set("isHot", isHot);
-            }
+//               user.set("isHot", isHot);
+//             }
 
-            Parse.Object.saveAll(users, {
+//             Parse.Object.saveAll(users, {
 
-              success: function(count) {
+//               success: function(count) {
 
-                var payload = alertPayload();
+//                 var payload = alertPayload();
 
-                var query = new Parse.Query(Parse.Installation);
+//                 var query = new Parse.Query(Parse.Installation);
 
-                query.containedIn('user', hotUsers);
+//                 query.containedIn('user', hotUsers);
 
-                helper.sendPushWithData(query, payload);
+//                 helper.sendPushWithData(query, payload);
 
-                resp.success("Saved Successful");
-              },
-              error: function(error) {
-                resp.error("ERROR");
-              }
-            });
-          },
-          error: function(error)
-          {
-            resp.error("cannot find users: " + error);
-          }
-        });
-});
-});
+//                 resp.success("Saved Successful");
+//               },
+//               error: function(error) {
+//                 resp.error("ERROR");
+//               }
+//             });
+//           },
+//           error: function(error)
+//           {
+//             resp.error("cannot find users: " + error);
+//           }
+//         });
+// });
+// });
 
 /*
  
