@@ -139,18 +139,7 @@ Parse.Cloud.define("updateCraig", function(req, resp) {
 
   query.find().then(function(activityManagers) {
 
-    var identifiers = [];
-
-    for (var i = 0; i < total; i++) {     
-
-            var activityManager = activityManagers[i];
-
-          var name = activityManager.id;
-
-          identifiers.push(name);     
-   }     
-
-   resp.success(identifiers);
+   resp.success(activityManagers.length);
   }, function(error) {
     resp.error(error);
   });
