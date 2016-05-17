@@ -11,18 +11,15 @@ Parse.Cloud.define("iosPushTest", function(request, response) {
 
   	user.id = 'b2akDflhj1';
 
-  pushQuery.equalTo('user', user); // targeting iOS devices only                                                                                                                                          
-
+  pushQuery.equalTo('user', user); // targeting iOS devices only                                                                                                                             
+  
   Parse.Push.send({
-    where: pushQuery, // Set our Installation query                                                                                                                                                              
-    data: {
-      alert: "Message: Here"
-    }
-  }, { success: function() {
-      console.log("#### PUSH OK");
-  }, error: function(error) {
-      console.log("#### PUSH ERROR" + error.message);
-  }, useMasterKey: true});
-
-  response.success('sent');
+  	where: pushQuery,
+  	data: {  alert: "Message: Here" }
+  }, { useMasterKey: true })
+  .then(function() {
+  	response.success('sent');
+  }, function(error) {
+  	response.error(error);
+  });
 });
