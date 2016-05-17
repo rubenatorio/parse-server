@@ -57,7 +57,7 @@ Parse.Cloud.define("logIn", function(req, res) {
 
 	if (phoneNumber && req.params.codeEntry) {
 		Parse.User.logIn(phoneNumber, secretPasswordToken + req.params.codeEntry).then(function (user) {
-			res.success(user._sessionToken);
+			res.success(user.getSessionToken());
 		}, function (err) {
 			res.error(err);
 		});
